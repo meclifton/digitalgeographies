@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<!--This is how you comment for html-->
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <style>
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  #map {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+  }
+</style>
+    <title> My Map </title>
+    <!--This where you put all your dependencies-->
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.js'></script>
+<link href='https://api.mapbox.com/mapbox-gl-js/v1.11.0/mapbox-gl.css' rel='stylesheet' />
+  </head>
+  <body>
+    <div id='map'></div>
+    <script>
+
+mapboxgl.accessToken = 'pk.eyJ1IjoibWVjbGlmdG9uIiwiYSI6ImNrbTA1dXNsdTA1amYyb205bjJxaTd4NnkifQ.Sh2ZM-nUgPC5vWK_pD2Mtg'; // Add your access token here
+// Below, we set up a 'map' variable which is a new map, with a standard style
+      
+//variables (var) up the top
+var map = new mapboxgl.Map({
+  container: 'map', // container id
+  style: 'mapbox://styles/mapbox/light-v10', // stylesheet location
+  zoom: 12 // starting zoom
+});
+
+var geolocate = new mapboxgl.GeolocateControl({
+  positionOptions: {
+    enableHighAccuracy: true
+  },
+  trackUserLocation: true
+});
+
+var geojson = {
+  type: 'FeatureCollection',
+  features: [
+    {
+      type: 'Feature',
+      properties: {
+        Title: 'Freshman Year'
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          -122.25570917129517,
+          37.86767993215757
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: {
+        Title: 'Sophomore Year'
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          -122.2583270072937,
+          37.87711454057636
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: {
+        Title: 'Junior Year'
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          -122.26577281951904,
+          37.87541233521233
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: {
+        Title: 'Best coffee'
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          -122.25482404232025,
+          37.869056240698086
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: {
+        Title: 'Got over a breakup'
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          -122.25782275199889,
+          37.8735576487711
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: {
+        Title: 'Most peaceful'
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          -122.25894927978514,
+          37.873193481108906
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: {
+        Title: 'Best night vibes'
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          -122.25661575794219,
+          37.87195275683868
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: {
+        Title: 'My secret spot'
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          -122.25922822952269,
+          37.87023772813792
+        ]
+      }
+    },
+    {
+      type: 'Feature',
+      properties: {
+        Title: 'Coolest steps'
+      },
+      geometry: {
+        type: 'Point',
+        coordinates: [
+          -122.25900828838348,
+          37.878698149051885
+        ]
+      }
+    }
+  ]
+}
+;
+
+var popup = new mapboxgl.Popup();
+
+// map.on(functions) at the bottom!
+map.addControl(geolocate);
+map.on('load', function() {
+  geolocate.trigger();
+  map.addLayer({
+  id: 'geojson',
+  type: 'symbol',
+  source: {
+    type: 'geojson',
+    data: geojson
+  },
+  layout: {
+    'icon-image': 'park-15', // more icons here: https://labs.mapbox.com/maki-icons/editor/
+    'icon-allow-overlap': true
+  },
+  paint: { }
+})
+});
+
+map.on('mousemove', function(e) {
+  var features = map.queryRenderedFeatures(e.point, { layers: ['geojson'] });
+  if (!features.length) {
+    popup.remove();
+    return;
+  }
+  var feature = features[0];
+
+  popup.setLngLat(feature.geometry.coordinates)
+  .setHTML(feature.properties.Title)
+  .addTo(map);
+
+});
+
+</script>
+  </body>
+</html>
